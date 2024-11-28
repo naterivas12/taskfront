@@ -20,6 +20,9 @@ interface Task {
   status: string; // Puede ser "Pending", "InProgress", "Completed"
 }
 
+// Variables de entorno para la URL del servidor
+const GRAPHQL_ENDPOINT = import.meta.env.VITE_GRAPHQL_ENDPOINT;
+
 // Query para obtener las tareas
 const query = `
   query GetTasks {
@@ -47,7 +50,7 @@ const tasks = ref<Task[]>([]);
 // Obtener las tareas desde el servidor
 onMounted(async () => {
   try {
-    const response = await fetch('http://localhost:4000/graphql', {
+    const response = await fetch(GRAPHQL_ENDPOINT, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ query }),
@@ -78,7 +81,7 @@ const updateTask = (updatedTask: Task) => {
 const deleteTask = async (taskId: string) => {
   try {
     // Enviar mutación para eliminar la tarea
-    const response = await fetch('http://localhost:4000/graphql', {
+    const response = await fetch(GRAPHQL_ENDPOINT, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({

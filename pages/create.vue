@@ -40,11 +40,18 @@
 
 <script setup>
 import { ref } from 'vue';
+import { useRouter } from 'vue-router'; // Importa el router para redirección
 
 // Estado del formulario
 const title = ref('');
 const description = ref('');
 const status = ref('Pending'); // Estado inicial
+
+// Configuración del router
+const router = useRouter();
+
+// URL del servidor GraphQL (usando variables de entorno)
+const GRAPHQL_ENDPOINT = import.meta.env.VITE_GRAPHQL_ENDPOINT;
 
 // Consulta GraphQL para crear tareas
 const mutation = `
@@ -61,7 +68,7 @@ const mutation = `
 // Función para enviar la tarea al servidor
 const createTask = async () => {
   try {
-    const response = await fetch('http://localhost:4000/graphql', {
+    const response = await fetch(GRAPHQL_ENDPOINT, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
@@ -74,9 +81,16 @@ const createTask = async () => {
       }),
     });
 
-    if (!response.ok) throw new Error('Error al crear la tarea');
+    if (!response.ok) throw new Error('Error en la comunicación con el servidor');
 
     const result = await response.json();
+
+    if (result.errors) {
+      console.error('Errores en la respuesta:', result.errors);
+      alert('Ocurrió un error al crear la tarea.');
+      return;
+    }
+
     console.log('Tarea creada:', result.data.createTask);
 
     // Limpiar el formulario
@@ -84,10 +98,12 @@ const createTask = async () => {
     description.value = '';
     status.value = 'Pending';
 
-    // Redireccionar (opcional)
+    // Mostrar mensaje y redirigir
     alert('¡Tarea creada con éxito!');
+    router.push('/'); // Redirigir a la lista de tareas (opcional)
   } catch (error) {
     console.error('Error creando la tarea:', error);
+    alert('Error al crear la tarea. Intente nuevamente.');
   }
 };
 </script>
