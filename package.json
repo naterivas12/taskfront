@@ -1,0 +1,25 @@
+{
+  "name": "nuxt-app",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "nuxt build",
+    "dev": "nuxt dev",
+    "generate": "nuxt generate",
+    "preview": "nuxt preview",
+    "postinstall": "nuxt prepare"
+  },
+  "dependencies": {
+    "@apollo/client": "^3.11.10",
+    "@vue/apollo-composable": "^4.2.1",
+    "bootstrap": "^5.3.3",
+    "bootstrap-icons": "^1.11.3",
+    "graphql": "^16.9.0",
+    "nuxt": "^3.14.1592",
+    "nuxt-apollo": "^0.2.1",
+    "nuxt-app": "file:",
+    "sass": "^1.81.0",
+    "vue": "^3.5.13",
+    "vue-router": "latest"
+  }
+}
